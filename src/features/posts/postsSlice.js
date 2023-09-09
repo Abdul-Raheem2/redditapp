@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (subreddit) => {
-    console.log(subreddit);
     const response = await fetch(`https://www.reddit.com/r/${subreddit}.json`);
     const json = await response.json();
     return json.data.children.map((post) => post.data);
@@ -18,11 +17,7 @@ const postsSlice = createSlice({
     extraReducers: {
         [fetchPosts.fulfilled]: (state,action) => {
             action.payload.forEach((post) => {
-                console.table(post);
-                state[post.id] = {
-                    id: post.id,
-                    title: post.title
-                };
+                state[post.id] = post;
             });
         }
     }
