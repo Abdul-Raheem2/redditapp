@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (subreddit) => {
-    const response = await fetch('https://www.reddit.com/r/popular.json');
-    console.table(response.headers);
+    console.log(subreddit);
+    const response = await fetch(`https://www.reddit.com/r/${subreddit}.json`);
     const json = await response.json();
     return json.data.children.map((post) => post.data);
 })
@@ -10,12 +10,18 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (subreddit)
 const postsSlice = createSlice({
     name:'posts',
     initialState: {},
-    reducers: {},
+    reducers: {
+        clearPosts: (state,action) => {
+            return {};
+        }
+    },
     extraReducers: {
         [fetchPosts.fulfilled]: (state,action) => {
             action.payload.forEach((post) => {
+                console.table(post);
                 state[post.id] = {
-                    text: post.selftext
+                    id: post.id,
+                    title: post.title
                 };
             });
         }
@@ -23,4 +29,5 @@ const postsSlice = createSlice({
 });
 
 export const selectPosts = (state) => state.posts;
+export const {clearPosts} = postsSlice.actions;
 export default postsSlice.reducer;

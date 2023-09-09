@@ -1,20 +1,26 @@
 import React from "react";
 import { useDispatch,useSelector } from "react-redux";
 
+import { clearPosts } from "../features/posts/postsSlice";
 import { fetchPosts } from "../features/posts/postsSlice";
 import { selectPosts } from "../features/posts/postsSlice";
 
+const subreddits = ['popular','funny','News','AskReddit']
 function AppLayout(){
     const dispatch = useDispatch();
-    function onClick(){
-        dispatch(fetchPosts("popular"));
+    function onClick(e){
+        dispatch(clearPosts());
+        dispatch(fetchPosts(e.target.value));
     }
     const posts = useSelector(selectPosts);
     return (
         <>
-            <button onClick={onClick}>Search r/popular</button>
+            
+            {subreddits.map((subreddit)=>{
+                return <button onClick={onClick} value={subreddit}>r/{subreddit}</button>
+            })}
             {Object.values(posts).map((post)=>{
-                return <p>{post.text}</p>
+                return <p key={post.id}>{post.title}</p>
             })}
         </>
     )
