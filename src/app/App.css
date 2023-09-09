@@ -5,3 +5,7 @@
     background-color:red;
     text-align: center;
 }
+
+.post{
+    border: thin solid black;
+}
