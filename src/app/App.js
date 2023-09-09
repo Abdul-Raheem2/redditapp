@@ -1,9 +1,9 @@
 import './App.css';
 import { RouterProvider,Route,createBrowserRouter,createRoutesFromElements } from 'react-router-dom';
-import Homepage from './Homepage';
+import AppLayout from './AppLayout';
 
 const appRouter=createBrowserRouter(createRoutesFromElements(
-    <Route path="/" element={<Homepage/>}>
+    <Route path="/" element={<AppLayout/>}>
 
     </Route>
 ));
