@@ -9,3 +9,8 @@
 .post{
     border: thin solid black;
 }
+
+img {
+    width: 500px;
+    height: 500px;
+}

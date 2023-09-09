@@ -7,7 +7,7 @@ import Posts from '../features/posts/posts';
 
 const appRouter = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<AppLayout/>}>
-        <Route path='/r/:subreddit' element={<Posts/>}/>
+        <Route path='/posts' element={<Posts/>}/>
     </Route>
 ));
 
