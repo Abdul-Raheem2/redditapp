@@ -23,15 +23,24 @@ const postsSlice = createSlice({
     name:'posts',
     initialState: {
         posts:{},
+        postClicked:'',
         isLoading: false,
         isError: false
     },
     reducers: {
+        toSinglePostPage: (state,action)=>{
+            console.log(action.payload);
+            state.postClicked=action.payload;
+        },
+        toAllPostsPage: (state,action)=>{
+            state.postClicked = '';
+        }
     },
     extraReducers: {
         [fetchPosts.fulfilled || searchPosts.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.isError = false;
+            state.postClicked='';
             addPosts(state,action.payload);
         },
         [fetchPosts.pending]: (state, action) => {
@@ -45,6 +54,7 @@ const postsSlice = createSlice({
         [searchPosts.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.isError = false;
+            state.postClicked='';
             addPosts(state,action.payload);
         },
         [searchPosts.pending]: (state, action) => {
@@ -58,6 +68,6 @@ const postsSlice = createSlice({
     }
 });
 
-export const selectPosts = (state) => state.posts;
-export const {clearPosts} = postsSlice.actions;
+export const {toSinglePostPage} = postsSlice.actions
+export const {toAllPostsPage} = postsSlice.actions;
 export default postsSlice.reducer;

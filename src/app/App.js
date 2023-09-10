@@ -1,19 +1,15 @@
 import './App.css'
 import React from "react";
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
-import AppLayout from './AppLayout';
-import Posts from '../features/posts/posts';
-
-const appRouter = createBrowserRouter(createRoutesFromElements(
-    <Route path='/' element={<AppLayout/>}>
-        <Route path='/posts' element={<Posts/>}/>
-    </Route>
-));
-
+import Banner from './Components/Banner';
+import Main from './Components/Main';
 function App(){
+
     return (
-        <RouterProvider router={appRouter}/>
+        <>
+            <Banner/>
+            <Main/>
+        </>
     )
 }
 
