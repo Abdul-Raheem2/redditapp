@@ -12,6 +12,13 @@ export const searchPosts = createAsyncThunk('posts/searchPosts', async (searchTe
     return json.data.children.map((post) => post.data);
 })
 
+export const getPostDetatils = createAsyncThunk('posts/getPostDetails', async ({subreddit,id}) => {
+    const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${id}.json`);
+    const json = await response.json();
+    console.log(response);
+    return json.data.children.map((post) => post.data);
+})
+
 function addPosts(state,posts){
     let tempPosts = {};
     posts.forEach((post) => {
@@ -29,7 +36,6 @@ const postsSlice = createSlice({
     },
     reducers: {
         toSinglePostPage: (state,action)=>{
-            console.log(action.payload);
             state.postClicked=action.payload;
         },
         toAllPostsPage: (state,action)=>{

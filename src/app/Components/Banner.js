@@ -7,7 +7,7 @@ const subreddits = ['popular','funny','News','AskReddit','story','pakistan']
 export default function Banner(){
     const dispatch = useDispatch();
     useEffect(()=>{
-        dispatch(fetchPosts('popular'));
+        dispatch(fetchPosts('news'));
     },[]);
     function onClick(e,subreddit){
         dispatch(fetchPosts(subreddit));
@@ -16,8 +16,8 @@ export default function Banner(){
         <div className="banner">
             <h1>Reddit App</h1>
             <aside><Search/></aside>
-            {subreddits.map((subreddit)=>{
-                return <button onClick={(e)=>onClick(e,subreddit)}>r/{subreddit}</button>
+            {subreddits.map((subreddit,i)=>{
+                return <button key={i} onClick={(e)=>onClick(e,subreddit)}>r/{subreddit}</button>
             })}
         </div>
     )
