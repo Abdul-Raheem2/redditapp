@@ -1,16 +1,38 @@
 *{
     margin:0;
+    box-sizing: border-box;
 }
 .banner{
     background-color:red;
     text-align: center;
 }
 
-.post{
+.posts{
+    text-align: center;
     border: thin solid black;
+    margin: 5px 50px;
+}
+
+.posts:hover{
+    border: thick solid black;
+}
+
+.postsTitle{
+    margin: 5px;
 }
 
 img {
     width: 500px;
     height: 500px;
+    margin:10px;
+}
+
+.postsContent {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+.postsContent p{
+    margin-top:10px;
 }
