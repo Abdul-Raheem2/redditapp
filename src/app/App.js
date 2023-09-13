@@ -8,7 +8,9 @@ function App(){
     return (
         <>
             <Banner/>
-            <Main/>
+            <div className='Main'>
+                <Main/>
+            </div>
         </>
     )
 }

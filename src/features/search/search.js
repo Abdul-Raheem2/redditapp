@@ -9,6 +9,7 @@ export default function Search(){
     function onSubmit(e){
         e.preventDefault();
         dispatch(searchPosts(searchTerm));
+        setSearchTerm('');
     }
     return (
         <form onSubmit={onSubmit} className="search">
