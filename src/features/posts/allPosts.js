@@ -11,16 +11,31 @@ export default function AllPosts(){
         dispatch(toSinglePostPage(id));
         dispatch(getPostDetatils({subreddit:posts.posts[id].subreddit,id:id}));
     }
-    return (
-        Object.values(posts.posts).map((post)=>{
-            return (
-                <div key={post.id} className='posts' onClick={(e)=>handleClick(e,post.id)}>
-                    <h2 className="postsTitle">r/{post.subreddit}: {post.title}</h2>
-                    <h3>post by: {post.author}</h3>
-                    <Content post={post}/>
-                </div>) 
-        })
-    )
+    if(posts.isLoading){
+        return(
+            <div>
+                <Title posts={posts}/>
+                <p className="loadingText">Loading...</p>
+            </div>
+        )
+    }else if(posts.isError){
+        return <p className="errorText">Subreddit/Search failed to load</p>
+    }else{
+        return (
+            <div>
+                <Title posts={posts}/>
+                {Object.values(posts.posts).map((post)=>{
+                    return (
+                    <div key={post.id} className='posts' onClick={(e)=>handleClick(e,post.id)}>
+                        <h3 className="postsTitle">r/{post.subreddit}: {post.title}</h3>
+                        <h4>post by: {post.author}</h4>
+                        <Content post={post}/>
+                    </div>) 
+                    })}
+            </div>
+        )
+    }
+
 }
 
 function Content({post}){
@@ -44,5 +59,13 @@ function Content({post}){
 
     }else{
         return <p>{post.selftext}</p>
+    }
+}
+
+function Title({posts}){
+    if(posts.search){
+        return <h2 className="postsTitle">Search Results for: {posts.titleTerm}</h2>
+    }else{
+        return <h2 className="postsTitle">r/{posts.titleTerm}:</h2>
     }
 }

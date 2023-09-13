@@ -31,6 +31,8 @@ const postsSlice = createSlice({
     initialState: {
         posts:{},
         postClicked:'',
+        search:false, //if posts should show search results or subreddit title
+        titleTerm:'',
         isLoading: false,
         isError: false
     },
@@ -42,35 +44,39 @@ const postsSlice = createSlice({
             state.postClicked = '';
         }
     },
-    extraReducers: {
-        [fetchPosts.fulfilled || searchPosts.fulfilled]: (state,action) => {
+    extraReducers: (builder) => {
+        builder.addCase(fetchPosts.fulfilled, (state,action) => {
             state.isLoading = false;
             state.isError = false;
             state.postClicked='';
             addPosts(state,action.payload);
-        },
-        [fetchPosts.pending]: (state, action) => {
+        });
+        builder.addCase(fetchPosts.pending, (state, action) => {
+            state.titleTerm=action.meta.arg;
+            state.search=false;
             state.isLoading = true;
             state.isError=false;
-        },
-        [fetchPosts.rejected]: (state,action) => {
+        });
+        builder.addCase(fetchPosts.rejected, (state,action) => {
             state.isLoading=false;
             state.isError= true;  
-        },
-        [searchPosts.fulfilled]: (state,action) => {
+        });
+        builder.addCase(searchPosts.fulfilled, (state,action) => {
             state.isLoading = false;
             state.isError = false;
             state.postClicked='';
             addPosts(state,action.payload);
-        },
-        [searchPosts.pending]: (state, action) => {
+        });
+        builder.addCase(searchPosts.pending, (state, action) => {
+            state.search=true;
+            state.titleTerm=action.meta.arg;
             state.isLoading = true;
             state.isError=false;
-        },
-        [searchPosts.rejected]: (state,action) => {
+        });
+        builder.addCase(searchPosts.rejected, (state,action) => {
             state.isLoading=false;
             state.isError= true;  
-        },
+        });
     }
 });
 

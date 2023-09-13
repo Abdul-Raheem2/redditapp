@@ -11,7 +11,7 @@ export default function Search(){
         dispatch(searchPosts(searchTerm));
     }
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="search">
             <input type="text" id="searchTerm" name="searchTerm" value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)}/>
             <input type="submit" value="Search"/>
         </form>
