@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { act } from "react-dom/test-utils";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (subreddit) => {
     const response = await fetch(`https://www.reddit.com/r/${subreddit}.json`);

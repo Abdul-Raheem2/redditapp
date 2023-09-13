@@ -1,19 +1,24 @@
 import { useSelector} from "react-redux";
-
+import PostContent from "./PostContent";
 export default function SinglePost(){
     const post = useSelector((state)=>state.posts.postClicked);
     if(post.loading){
         return(
             <div>
-                <h2 className="title">r/{post.subreddit}: {post.title}</h2>
-                <p className="loadingText">Loading...</p>
+                <PostContent post={post}/>
+                <button><a href={`https://www.reddit.com/r/${post.subreddit}/comments/${post.id}`} target='_blank'>View on Reddit</a></button>
+                <p className="loadingText">Loading Comments...</p>
             </div>
         )
     }else{
         return (
             <div>
-                <h2 className="title">r/{post.subreddit}: {post.title}</h2>
+                <PostContent post={post}/>
                 <button><a href={`https://www.reddit.com/r/${post.subreddit}/comments/${post.id}`} target='_blank'>View on Reddit</a></button>
+                <p>Comments:</p>
+                {post.comments.map((comment)=>{
+                    return <p>{comment.body}</p>
+                })}
             </div>
         )
     }
