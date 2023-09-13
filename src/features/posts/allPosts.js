@@ -2,14 +2,13 @@ import React from "react";
 
 import {useDispatch, useSelector } from "react-redux";
 
-import { toSinglePostPage,getPostDetatils } from "./postsSlice";
+import { toSinglePostPage,getPostDetatils, getComments } from "./postsSlice";
 
 export default function AllPosts(){
     const posts = useSelector((state)=> state.posts);
     const dispatch = useDispatch();
     function handleClick(e,id){
-        dispatch(toSinglePostPage(id));
-        dispatch(getPostDetatils({subreddit:posts.posts[id].subreddit,id:id}));
+        dispatch(getComments({id:id,permalink:posts.posts[id].permalink}));
     }
     if(posts.isLoading){
         return(
@@ -39,33 +38,33 @@ export default function AllPosts(){
 }
 
 function Content({post}){
-    if(post.is_video){
+    if(post.type==="video"){
         return <video height="500" width="500" controls>
-            <source src={post.secure_media.reddit_video.fallback_url} type="video/mp4"/>
+            <source src={post.video_url} type="video/mp4"/>
             Video not supported
         </video>
     }
-    else if(post.post_hint==="image"){
-        if(post.selftext){
+    else if(post.type==="image"){
+        if(post.text){
             return (
                 <div className="postsContent">
-                    <img src={post.url} alt=""/>
-                    <p>{post.selftext}</p>
+                    <img src={post.image_url} alt=""/>
+                    <p>{post.text}</p>
                 </div>
             )
         }else{
-            return <img src={post.url} alt=""/>
+            return <img src={post.image_url} alt=""/>
         }
 
     }else{
-        return <p>{post.selftext}</p>
+        return <p>{post.text}</p>
     }
 }
 
 function Title({posts}){
     if(posts.search){
-        return <h2 className="postsTitle">Search Results for: {posts.titleTerm}</h2>
+        return <h2 className="title">Search Results for: {posts.titleTerm}</h2>
     }else{
-        return <h2 className="postsTitle">r/{posts.titleTerm}:</h2>
+        return <h2 className="title">r/{posts.titleTerm}:</h2>
     }
 }
