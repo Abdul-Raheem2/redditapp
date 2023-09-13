@@ -19,10 +19,10 @@ export default function AllPosts(){
         return <p className="errorText">Subreddit/Search failed to load</p>
     }else{
         return (
-            <div>
+            <div className='posts'>
                 <Title posts={posts}/>
                 {Object.values(posts.posts).map((post)=>{
-                    return <PostContent post={post} className='posts' onClick={(e)=>dispatch(getComments({id:post.id,permalink:post.permalink}))}/>
+                    return <PostContent post={post} className='post' onClick={(e)=>dispatch(getComments({id:post.id,permalink:post.permalink}))}/>
                 })}
             </div>
         )
