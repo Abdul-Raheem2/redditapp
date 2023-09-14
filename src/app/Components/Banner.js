@@ -1,5 +1,5 @@
 import React,{useEffect} from "react";
-import Search from '../../features/search/Search';
+import Search from '../../features/search/searchBar';
 import { useDispatch } from "react-redux";
 import { fetchPosts} from '../../features/posts/postsSlice'
 
