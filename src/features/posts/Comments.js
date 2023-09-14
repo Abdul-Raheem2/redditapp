@@ -4,7 +4,7 @@ import { showHideCommentReplies } from "./postsSlice";
 
 export default function Comments({comments}){
     const dispatch = useDispatch();
-    function showReplies(e,comment){
+    function showHideReplies(e,comment){
         if(e.target.value==="true"){
             dispatch(showHideCommentReplies({comment:comment,visibility:true}));
             e.target.innerHTML = "Hide Replies";
@@ -15,18 +15,11 @@ export default function Comments({comments}){
             e.target.value = true;
         }
     }
-    function style(comment){
-        return {
-            marginLeft: comment.depth*10,
-            border: comment.depth ? "thin solid red" : "thick solid black",
-            display: comment.visible ? "block" : "none"
-        }
-    }
     return comments.map((comment)=>{
         if(comment.replies.length){
             return (<div key={comment.id} style={style(comment)}>
                 <p>{comment.author}: {comment.body}</p>
-                <button onClick={(e)=>showReplies(e,comment)} value={true}>Show Replies</button>
+                <button onClick={(e)=>showHideReplies(e,comment)} value={true}>Show Replies</button>
                 <Comments comments={comment.replies}/>
             </div>)
         }else{
@@ -39,3 +32,11 @@ export default function Comments({comments}){
     })
 }
 
+
+function style(comment){
+    return {
+        marginLeft: comment.depth*10,
+        border: comment.depth ? "thin solid black" : "thick solid black",
+        display: comment.visible ? "block" : "none"
+    }
+}
