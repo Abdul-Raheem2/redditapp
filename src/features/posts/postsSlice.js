@@ -19,6 +19,7 @@ export const getComments = createAsyncThunk('posts/getComments', async ({id,perm
 })
 
 function addPosts(state,posts){
+    console.log(posts);
     let tempPosts = {};
     posts.forEach((post) => {
         tempPosts[post.id] = {
@@ -37,6 +38,7 @@ function addPosts(state,posts){
     state.posts = tempPosts;
 }
 function addComments(state,comments){
+    console.log(comments);
     console.log(comments.pop()); /*dont delete pop*/
     state.postClicked.comments = comments.map((comment)=>{
         let n =  {
@@ -78,17 +80,19 @@ const postsSlice = createSlice({
         isError: false
     },
     reducers: {
-        showCommentReplies: (state,action)=> {
+        showHideCommentReplies: (state,action)=> {
+            const {comment,visibility} = action.payload;
+            console.log(visibility);
             let found = state.postClicked.comments;
-            if(action.payload.parentIds.length){
-                action.payload.parentIds.forEach((id)=>{
-                    found = found.find((comment)=>comment.id===id).replies
+            if(comment.parentIds.length){
+                comment.parentIds.forEach((id)=>{
+                    found = found.find((c)=>c.id===id).replies
                 })
             }
-            found.find((comment)=>comment.id===action.payload.id).replies.forEach((reply)=>{
-                reply.visible=true;
+            found.find((c)=>c.id===comment.id).replies.forEach((reply)=>{
+                reply.visible=visibility;
             })
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchPosts.fulfilled, (state,action) => {
@@ -149,4 +153,4 @@ const postsSlice = createSlice({
 
 export default postsSlice.reducer;
 
-export const {showCommentReplies} = postsSlice.actions;
+export const {showHideCommentReplies} = postsSlice.actions;

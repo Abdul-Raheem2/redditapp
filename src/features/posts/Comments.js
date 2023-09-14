@@ -1,11 +1,19 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { showCommentReplies } from "./postsSlice";
+import { showHideCommentReplies } from "./postsSlice";
 
 export default function Comments({comments}){
     const dispatch = useDispatch();
     function showReplies(e,comment){
-        dispatch(showCommentReplies(comment));
+        if(e.target.value==="true"){
+            dispatch(showHideCommentReplies({comment:comment,visibility:true}));
+            e.target.innerHTML = "Hide Replies";
+            e.target.value = false;
+        }else{
+            dispatch(showHideCommentReplies({comment:comment,visibility:false}));
+            e.target.innerHTML = "Show Replies";
+            e.target.value = true;
+        }
     }
     function style(comment){
         return {
@@ -18,7 +26,7 @@ export default function Comments({comments}){
         if(comment.replies.length){
             return (<div key={comment.id} style={style(comment)}>
                 <p>{comment.author}: {comment.body}</p>
-                <button onClick={(e)=>showReplies(e,comment)}>Show Replies</button>
+                <button onClick={(e)=>showReplies(e,comment)} value={true}>Show Replies</button>
                 <Comments comments={comment.replies}/>
             </div>)
         }else{
