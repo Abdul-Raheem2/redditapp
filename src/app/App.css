@@ -91,3 +91,7 @@ img {
 .postsContent p{
     margin-top:10px;
 }
+/*   */
+.comment{
+    border:solid black;
+}

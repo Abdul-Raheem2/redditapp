@@ -22,7 +22,7 @@ export default function AllPosts(){
             <div className='posts'>
                 <Title posts={posts}/>
                 {Object.values(posts.posts).map((post)=>{
-                    return <PostContent post={post} className='post' onClick={(e)=>dispatch(getComments({id:post.id,permalink:post.permalink}))}/>
+                    return <PostContent key={post.id} post={post} className='post' onClick={(e)=>dispatch(getComments({id:post.id,permalink:post.permalink}))}/>
                 })}
             </div>
         )

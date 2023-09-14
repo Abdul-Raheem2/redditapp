@@ -21,7 +21,6 @@ export const getComments = createAsyncThunk('posts/getComments', async ({id,perm
 function addPosts(state,posts){
     let tempPosts = {};
     posts.forEach((post) => {
-        console.log(post);
         tempPosts[post.id] = {
             id:post.id,
             title:post.title,
@@ -37,6 +36,37 @@ function addPosts(state,posts){
     });
     state.posts = tempPosts;
 }
+function addComments(state,comments){
+    console.log(comments.pop()); /*dont delete pop*/
+    state.postClicked.comments = comments.map((comment)=>{
+        let n =  {
+            id:comment.id,
+            parentIds: [],
+            author:comment.author,
+            body:comment.body,
+            depth:comment.depth,
+            visible:true,
+        }
+        n.replies = addReplies(comment,n);
+        return n;
+    })
+}
+
+function addReplies(comment,n){
+    if(!comment.replies) {return []}
+    return comment.replies.data.children.filter((r)=>r.kind==="t1").map((reply)=>{
+        let m =  {
+            id:reply.data.id,
+            parentIds: [...n.parentIds,comment.id],
+            author: reply.data.author,
+            body:reply.data.body,
+            depth: reply.data.depth,
+            visible:false
+        }
+        m.replies = addReplies(reply.data,m);
+        return m;
+    })
+}
 const postsSlice = createSlice({
     name:'posts',
     initialState: {
@@ -47,7 +77,19 @@ const postsSlice = createSlice({
         isLoading: false,
         isError: false
     },
-    reducers: {},
+    reducers: {
+        showCommentReplies: (state,action)=> {
+            let found = state.postClicked.comments;
+            if(action.payload.parentIds.length){
+                action.payload.parentIds.forEach((id)=>{
+                    found = found.find((comment)=>comment.id===id).replies
+                })
+            }
+            found.find((comment)=>comment.id===action.payload.id).replies.forEach((reply)=>{
+                reply.visible=true;
+            })
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchPosts.fulfilled, (state,action) => {
             state.isLoading = false;
@@ -82,24 +124,29 @@ const postsSlice = createSlice({
             state.isError= true;  
         });
         builder.addCase(getComments.fulfilled, (state,action) => {
-            console.log(action.payload);
             state.postClicked={
                 ...state.postClicked,
-                comments:action.payload,
                 loading:false,
-                clicked:true
+                clicked:true,
+                commentError:false
             }
+            addComments(state,action.payload);
         });
         builder.addCase(getComments.pending, (state,action) => {
             state.postClicked = {
                 loading: true,
                 clicked:true,
+                commentError: false,
                 ...state.posts[action.meta.arg.id]
             }
-            state.postClicked.loading=true;
-            state.postClicked.clicked=true;
+        });
+        builder.addCase(getComments.rejected, (state,action) => {
+            state.postClicked.loading=false;
+            state.postClicked.commentError = true;
         });
     }
 });
 
 export default postsSlice.reducer;
+
+export const {showCommentReplies} = postsSlice.actions;
